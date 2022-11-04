@@ -1,3 +1,4 @@
+from bidict import bidict
 from sentence_transformers import SentenceTransformer, util
 import os
 from fetch_news import fetch
@@ -6,10 +7,10 @@ import numpy as np
 
 embedding_path = "embeddings/data.pkl"
 
-bi_encoder = SentenceTransformer("shibing624/text2vec-base-chinese",device='cuda')
+bi_encoder = SentenceTransformer("models/shibing624_text2vec-base-chinese",device='cuda')
 
 
-passages, text_id = fetch("https://pansci.asia/archives/348757")
+passages, text_id = fetch("https://www.twreporter.org/a/opinion-lower-voting-age-to-18-japan-expenrience")
 
 
 corpus_embeddings = bi_encoder.encode(

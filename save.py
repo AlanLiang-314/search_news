@@ -42,7 +42,7 @@ class pickler:
 
     def show(self):
         print(self.data)
-        # return self.data
+        return self.data
 
     def find_by_id(self, id: str):
         return self.data.get(id)
