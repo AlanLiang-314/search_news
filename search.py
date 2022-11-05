@@ -13,16 +13,7 @@ embedder = emb.embedder(EMBEDDING_PATH)
 bi_encoder = SentenceTransformer("models/shibing624_text2vec-base-chinese", device='cpu')
 
 
-def load_embeddings():
-    global sent_emb, sents, ids
-    with open(EMBEDDING_PATH, 'rb') as fIn:
-            data = pickle.load(fIn)
-            sent_emb = data['embeddings']
-            sents = data['sents']
-            ids = data['uuid']
-
-load_embeddings
-# sent_emb, sents, ids = embedder.read()
+sent_emb, sents, ids = embedder.read()
 
 while True:
     query = input("please enter a prompt，| to split negative prompt: ")
