@@ -1,10 +1,12 @@
 from sentence_transformers import SentenceTransformer
 import os
 from fetch_news import fetch
+from const import EMBEDDING_PATH
+import emb
 import pickle
 import numpy as np
 
-embedding_path = "embeddings/data.pkl"
+
 
 bi_encoder = SentenceTransformer("models/shibing624_text2vec-base-chinese",device='cuda')
 
@@ -20,13 +22,13 @@ def encode(url: str):
 
     # save to data.pkl
     text_ids = [text_id]*len(passages)
-    if not os.path.exists(embedding_path):
-        with open(embedding_path, 'wb') as fIn:
+    if not os.path.exists(EMBEDDING_PATH):
+        with open(EMBEDDING_PATH, 'wb') as fIn:
             pickle.dump({'sents':passages, 'embeddings':corpus_embeddings, 'uuid':text_ids},fIn)
     else:
         # check if the passages is empty
         if len(passages):
-            with open(embedding_path, 'rb') as fOut:
+            with open(EMBEDDING_PATH, 'rb') as fOut:
                 data = pickle.load(fOut)
                 sent_emb = data['embeddings']
                 sents = data['sents']
@@ -36,7 +38,7 @@ def encode(url: str):
             sent_emb = np.concatenate([sent_emb, corpus_embeddings])
             ids.extend(text_ids)
             
-            with open(embedding_path, 'wb') as fIn:
+            with open(EMBEDDING_PATH, 'wb') as fIn:
                 pickle.dump({'sents':sents, 'embeddings':sent_emb, 'uuid':ids},fIn)
 
 

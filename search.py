@@ -1,23 +1,28 @@
 from sentence_transformers import SentenceTransformer, util
+from const import EMBEDDING_PATH, URL_PATH
 import pickle
+import emb
 import save
 from pprint import pprint
 
-embedding_path = "embeddings/data.pkl"
 
-pickler = save.pickler("urls/urls.pkl")
+pickler = save.pickler(URL_PATH)
+
+embedder = emb.embedder(EMBEDDING_PATH)
 
 bi_encoder = SentenceTransformer("models/shibing624_text2vec-base-chinese", device='cpu')
 
+
 def load_embeddings():
     global sent_emb, sents, ids
-    with open(embedding_path, 'rb') as fIn:
+    with open(EMBEDDING_PATH, 'rb') as fIn:
             data = pickle.load(fIn)
             sent_emb = data['embeddings']
             sents = data['sents']
             ids = data['uuid']
 
-load_embeddings()
+load_embeddings
+# sent_emb, sents, ids = embedder.read()
 
 while True:
     query = input("please enter a prompt，| to split negative prompt: ")
@@ -34,7 +39,7 @@ while True:
 
     #Compute cosine similarities 
     hits = util.semantic_search(
-            query_emb, sent_emb, top_k=4, score_function=util.cos_sim)[0]
+            query_emb, sent_emb, top_k=5, score_function=util.cos_sim)[0]
     
     for hit in hits:
         #pprint("{} , cos_sim: {:.2f}".format(sents[hit['corpus_id']], hit['score']))

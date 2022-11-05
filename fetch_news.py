@@ -1,12 +1,8 @@
-import pickle
 from newspaper import Article
-import secrets
+from const import URL_PATH
 import save
-import os
 import re
 
-
-url_path = "urls/urls.pkl"
 
 def zng(paragraph):
         for sent in re.findall(u'[^!?。\.\!\?]+[!?。\.\!\?]?', paragraph, flags=re.U):
@@ -43,7 +39,7 @@ def fetch(url: str, windows_size: int=3):
     passages = preprocess_text(article)
     #print(passages)
 
-    pickler = save.pickler(url_path)
+    pickler = save.pickler(URL_PATH)
     article_id = pickler.add(url)
     if article_id == None:
         raise ValueError("the file already exist")
