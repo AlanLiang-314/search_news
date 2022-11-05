@@ -1,6 +1,5 @@
 from sentence_transformers import SentenceTransformer, util
 from const import EMBEDDING_PATH, URL_PATH
-import pickle
 import emb
 import save
 from pprint import pprint
