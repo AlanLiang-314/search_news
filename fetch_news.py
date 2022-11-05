@@ -13,7 +13,6 @@ def zng(paragraph):
             sent = re.sub(r'!?\[([^\[]+)\]\(([^\)]+)\)','',sent) #去除超連結
             sent = re.sub('\*|#+ |- |==|`+|> |\[\[|\]\]|---','',sent) #去除強調，程式碼，螢光筆等記號
             sent = re.sub(r'\n',' ',sent) #去除多餘的換行符
-            #sent = sent.replace()
             if len(sent):
                 yield sent
 
