@@ -1,7 +1,8 @@
 from sentence_transformers import SentenceTransformer, util
+from fastapi import FastAPI
 from fetch_news import fetch
 from const import EMBEDDING_PATH, URL_PATH
-from pprint import pprint
+# from pprint import pprint
 import save
 import emb
 
@@ -12,12 +13,20 @@ bi_encoder = SentenceTransformer(
     "models/shibing624_text2vec-base-chinese", device='cuda')
 
 
-def reload_embeddings():
+# ===== FastAPI =====
+
+app = FastAPI()
+
+
+@app.get("/reload")
+async def reload_embeddings():
+    # discarded
     global sent_emb, sents, ids
     sent_emb, sents, ids = embedder.read()
 
 
-def encode(url: str):
+@app.get("/encode")
+async def encode(url: str):
 
     passages, text_id = fetch(url)
 
@@ -31,7 +40,10 @@ def encode(url: str):
         embedder.write(passages, corpus_embeddings, text_ids)
         embedder.save()
 
+    return True
 
+
+@app.get("/search")
 def search(query: str):
     query = query.split("|")
     # Encode text descriptions
@@ -42,10 +54,19 @@ def search(query: str):
     else:
         query_emb = query_emb[0]
 
+    sent_emb, sents, ids = embedder.read()
     # Compute cosine similarities
     hits = util.semantic_search(
         query_emb, sent_emb, top_k=5, score_function=util.cos_sim)[0]
 
+    result = {}
+    i = 1
     for hit in hits:
-        pprint(sents[hit['corpus_id']])
-        pprint(pickler.find_by_id(ids[hit['corpus_id']]))
+        sent = sents[hit['corpus_id']]
+        id = pickler.find_by_id(ids[hit['corpus_id']])
+        # pprint(sents[hit['corpus_id']])
+        # pprint(pickler.find_by_id(ids[hit['corpus_id']]))
+        result[i] = {"sentence": sent, "id": id}
+        i += 1
+
+    return result
