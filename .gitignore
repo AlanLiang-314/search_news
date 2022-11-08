@@ -3,3 +3,4 @@ __pycache__
 embeddings/
 backup/
 urls/
+venv/

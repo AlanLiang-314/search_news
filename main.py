@@ -2,7 +2,6 @@ from sentence_transformers import SentenceTransformer, util
 from fastapi import FastAPI
 from fetch_news import fetch
 from const import EMBEDDING_PATH, URL_PATH
-# from pprint import pprint
 import save
 import emb
 
