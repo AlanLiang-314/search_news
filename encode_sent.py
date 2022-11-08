@@ -1,12 +1,14 @@
 from sentence_transformers import SentenceTransformer
 from fetch_news import fetch
+import torch
 from const import EMBEDDING_PATH
 import emb
 
 
 embedder = emb.embedder(EMBEDDING_PATH)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 bi_encoder = SentenceTransformer(
-    "models/shibing624_text2vec-base-chinese", device='cuda')
+    "models/shibing624_text2vec-base-chinese", device=device)
 
 
 def encode(url: str):

@@ -1,5 +1,6 @@
 from sentence_transformers import SentenceTransformer, util
 from fastapi import FastAPI
+import torch
 from fetch_news import fetch
 from const import EMBEDDING_PATH, URL_PATH
 import save
@@ -8,8 +9,9 @@ import emb
 
 pickler = save.pickler(URL_PATH)
 embedder = emb.embedder(EMBEDDING_PATH)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 bi_encoder = SentenceTransformer(
-    "models/shibing624_text2vec-base-chinese", device='cuda')
+    "models/shibing624_text2vec-base-chinese", device=device)
 
 
 # ===== FastAPI =====
@@ -30,7 +32,7 @@ async def encode(url: str):
     passages, text_id = fetch(url)
 
     corpus_embeddings = bi_encoder.encode(
-        passages, show_progress_bar=True, device='cuda')
+        passages, show_progress_bar=True)
 
     # save to data.pkl
     text_ids = [text_id]*len(passages)

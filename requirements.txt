@@ -1,5 +1,5 @@
 numpy
-pickle
 fastapi
 sentence_transformers
-newspaper
+newspaper3k
+bidict
