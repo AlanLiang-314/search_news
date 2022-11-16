@@ -4,4 +4,4 @@ embeddings/
 backup/
 urls/
 venv/
-test.ipynb
+*.ipynb
